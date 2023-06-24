@@ -8,10 +8,13 @@ class Game {
 
     this.background = new Background(this.ctx);
     this.mario = new Mario(this.ctx, 10, this.canvas.height - 164);
-    this.enemy = new Enemy(this.ctx);
+    this.enemies = [];
 
     this.audio = new Audio("/assets/audio/main.mp3");
+    this.audio.volume = 0.05;
     this.gameOverAudio = new Audio("/assets/audio/game-over.mp3");
+
+    this.tick = 0;
   }
 
   onKeyDown(event) {
@@ -24,13 +27,14 @@ class Game {
 
   start() {
     if (!this.drawIntervalId) {
-      //this.audio.play();
+      this.audio.play();
 
       this.drawIntervalId = setInterval(() => {
         this.clear();
         this.move();
         this.draw();
         this.checkCollisions();
+        this.addEnemy();
       }, 1000 / this.fps);
     }
   }
@@ -41,22 +45,41 @@ class Game {
     this.drawIntervalId = undefined;
   }
 
+  addEnemy() {
+    this.tick++;
+
+    // we add new enemy every 100 times we draw!
+    if (this.tick > 300) {
+      this.tick = 0;
+      this.enemies.push(new Enemy(this.ctx));
+    }
+  }
+
   checkCollisions() {
     const m = this.mario;
-    const e = this.enemy;
 
-    const colx = m.x + m.w >= e.x && m.x < e.x + e.w;
-    const coly = m.y + m.h >= e.y && m.y < e.y + e.h;
+    this.enemies.forEach((e) => {
+      const colx = m.x + m.w >= e.x && m.x < e.x + e.w;
+      const coly = m.y + m.h >= e.y && m.y < e.y + e.h;
 
-    if (colx && coly) {
-      this.gameOver();
-    }
+      if (colx && coly) {
+        this.gameOver();
+      }
+    });
   }
 
   gameOver() {
     this.gameOverAudio.play();
+
     this.stop();
-    alert("GAME OVER");
+
+    this.ctx.font = "40px Comic Sans MS";
+    this.ctx.textAlign = "center";
+    this.ctx.fillText(
+      "GAME OVER",
+      this.ctx.canvas.width / 2,
+      this.ctx.canvas.height / 2
+    );
   }
 
   clear() {
@@ -66,12 +89,12 @@ class Game {
   move() {
     this.background.move();
     this.mario.move();
-    this.enemy.move();
+    this.enemies.forEach((e) => e.move());
   }
 
   draw() {
     this.background.draw();
     this.mario.draw();
-    this.enemy.draw();
+    this.enemies.forEach((e) => e.draw());
   }
 }

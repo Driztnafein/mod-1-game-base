@@ -1,5 +1,4 @@
 class Background {
-
   constructor(ctx) {
     this.ctx = ctx;
 
@@ -11,10 +10,10 @@ class Background {
     this.vx = BACKGROUND_SPEED;
 
     this.sprite = new Image();
-    this.sprite.src = '/assets/img/bg.jpg';
+    this.sprite.src = "/assets/img/bg.jpg";
     this.sprite.onload = () => {
       this.sprite.isReady = true;
-    }
+    };
   }
 
   move() {
@@ -27,21 +26,8 @@ class Background {
 
   draw() {
     if (this.sprite.isReady) {
-      this.ctx.drawImage(
-        this.sprite,
-        this.x,
-        this.y,
-        this.w,
-        this.h
-      )
-      this.ctx.drawImage(
-        this.sprite,
-        this.x + this.w,
-        this.y,
-        this.w,
-        this.h
-      )
+      this.ctx.drawImage(this.sprite, this.x, this.y, this.w, this.h);
+      this.ctx.drawImage(this.sprite, this.x + this.w, this.y, this.w, this.h);
     }
-    
   }
 }
