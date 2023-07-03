@@ -2,16 +2,16 @@ class Enemy {
   constructor(ctx) {
     this.ctx = ctx;
     this.x = this.ctx.canvas.width;
-    this.y = this.ctx.canvas.height - 128;
-    this.w = 30;
-    this.h = 40;
+    this.y = this.ctx.canvas.height - 270;
+    this.w = 350;
+    this.h = 210;
     this.vx = -3;
 
     this.sprite = new Image();
-    this.sprite.src = "/assets/img/koopa-sprite.png";
+    this.sprite.src = "/assets/img/cazafantasmas.png";
     this.sprite.verticalFrames = 1;
     this.sprite.verticalFrameIndex = 0;
-    this.sprite.horizontalFrames = 2;
+    this.sprite.horizontalFrames = 1;
     this.sprite.horizontalFrameIndex = 0;
 
     this.sprite.onload = () => {
@@ -54,7 +54,7 @@ class Enemy {
   animate() {
     this.animationTick++;
 
-    if (this.animationTick > MARION_RAN_ANIMATION_TICK) {
+    if (this.animationTick > PIGEON_RAN_ANIMATION_TICK) {
       this.animationTick = 0;
       this.sprite.horizontalFrameIndex++;
 

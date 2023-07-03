@@ -4,13 +4,14 @@ const KEY_RIGHT = 39;
 const KEY_LEFT = 37;
 const KEY_SPACE = 32;
 
-const SQUARE_SPEED = 5;
-const SQUARE_JUMP = 10;
-const SQUARE_AY = 0.5;
+const KEY_WHITE_POO = 90; 
+const KEY_BLACK_POO = 88; 
 
-const BACKGROUND_SPEED = -1;
 
-const MARIO_SPEED = 5;
-const MARIO_JUMP = 10;
-const MARIO_AY = 0.5;
-const MARION_RAN_ANIMATION_TICK = 10;
+
+
+const BACKGROUND_SPEED = 0;
+
+const PIGEON_SPEED = 5;
+const PIGEON_AY = 0.1;
+const PIGEON_RAN_ANIMATION_TICK = 10;

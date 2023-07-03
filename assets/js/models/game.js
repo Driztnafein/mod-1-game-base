@@ -7,22 +7,22 @@ class Game {
     this.fps = 60;
 
     this.background = new Background(this.ctx);
-    this.mario = new Mario(this.ctx, 10, this.canvas.height - 164);
+    this.pigeon = new Pigeon(this.ctx, 10, this.canvas.height - 164);
     this.enemies = [];
 
     this.audio = new Audio("/assets/audio/main.mp3");
     this.audio.volume = 0.05;
-    this.gameOverAudio = new Audio("/assets/audio/game-over.mp3");
+   
 
     this.tick = 0;
   }
 
   onKeyDown(event) {
-    this.mario.onKeyDown(event);
+    this.pigeon.onKeyDown(event);
   }
 
   onKeyUp(event) {
-    this.mario.onKeyUp(event);
+    this.pigeon.onKeyUp(event);
   }
 
   start() {
@@ -48,7 +48,6 @@ class Game {
   addEnemy() {
     this.tick++;
 
-    // we add new enemy every 100 times we draw!
     if (this.tick > 300) {
       this.tick = 0;
       this.enemies.push(new Enemy(this.ctx));
@@ -56,7 +55,7 @@ class Game {
   }
 
   checkCollisions() {
-    const m = this.mario;
+    const m = this.pigeon;
 
     this.enemies.forEach((e) => {
       const colx = m.x + m.w >= e.x && m.x < e.x + e.w;
@@ -69,7 +68,7 @@ class Game {
   }
 
   gameOver() {
-    this.gameOverAudio.play();
+    
 
     this.stop();
 
@@ -87,14 +86,14 @@ class Game {
   }
 
   move() {
-    this.background.move();
-    this.mario.move();
+  
+    this.pigeon.move();
     this.enemies.forEach((e) => e.move());
   }
 
   draw() {
     this.background.draw();
-    this.mario.draw();
+    this.pigeon.draw();
     this.enemies.forEach((e) => e.draw());
   }
 }
