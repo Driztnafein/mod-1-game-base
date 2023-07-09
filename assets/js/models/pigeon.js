@@ -6,8 +6,8 @@ class Pigeon {
 
     this.x = x;
     this.y = y;
-    this.w = Math.floor(168 / 2);
-    this.h = Math.floor(168 / 2);
+    this.w = 64;
+    this.h = 64;
     this.h0 = this.h;
 
     this.vx = 0;
@@ -19,7 +19,10 @@ class Pigeon {
 
     this.isOnGround = true;
     this.isWalking = false;
-    
+    this.isEating = false;
+    this.isSpacePressed = false;
+    this.shouldStopEating = false;
+
     this.isFlying = false;
 
     this.flyingSprite = new Image();
@@ -48,13 +51,29 @@ class Pigeon {
       this.walkingSprite.frameHeight = 32;
     };
 
+    this.eatingSprite = new Image();
+    this.eatingSprite.src = "/assets/img/eatSprite.png";
+    
+    this.eatingSprite.verticalFrameIndex = 0;
+    this.eatingSprite.horizontalFrames = 4;
+    this.eatingSprite.horizontalFrameIndex = 0;
+
+    this.eatingSprite.onload = () => {
+      this.eatingSprite.isReady = true;
+      console.log('Eating sprite loaded:', this.eatingSprite.isReady)
+
+      this.eatingSprite.frameWidth = 32; 
+      this.eatingSprite.frameHeight = 32;
+    };
+
+    this.isEating = false;
 
     this.animationTick = 0;
   }
 
   onKeyDown(event) {
     switch (event.keyCode) {
-        case KEY_UP:
+      case KEY_UP:
         this.isFlying = true;
         this.vy = -PIGEON_SPEED;
         break;
@@ -76,8 +95,21 @@ class Pigeon {
       case KEY_BLACK_POO:
         this.weapon.shootBlack('black');
         break;
+      case KEY_SPACE:
+        console.log('Space key pressed');
+        console.log('isFlying:', this.isFlying);
+        console.log('isEating:', this.isEating);
+        if (!this.isFlying && (!this.isEating || this.shouldStopEating)) {
+          this.isEating = true;
+          this.isSpacePressed = true;
+          console.log('Pigeon starts eating.');
+          this.shouldStopEating = false;
+        }
+        break;
     }
   }
+  
+
 
   onKeyUp(event) {
     switch (event.keyCode) {
@@ -90,8 +122,17 @@ class Pigeon {
         this.vx = 0;
         this.isWalking = false;
         break;
+      case KEY_SPACE:
+        console.log('Space key released');
+        if (this.isEating) {
+          this.isSpacePressed = false;
+          console.log('Pigeon should stop eating.');
+        }
+        this.shouldStopEating = true; // Mueve esta línea fuera del bloque if anterior
+        break;
     }
   }
+  
 
 
   move() {
@@ -115,15 +156,29 @@ class Pigeon {
     if (!this.isFlying && this.y > this.y0) {
       this.y = this.y0;
       this.vy = 0;
-      this.isOnGround = true; // Establecer isOnGround en true cuando el personaje está en el suelo
+      this.isOnGround = true;
     } else {
       this.isOnGround = false;
     }
   }
 
   draw() {
-    if (this.isWalking && this.isOnGround && this.walkingSprite.isReady) {
-      // Dibujar el sprite de caminar solo si está en el suelo, en movimiento y el sprite está listo
+    if (!this.isFlying && this.isEating && this.isSpacePressed && this.eatingSprite.isReady) {
+      console.log('Drawing eating sprite');
+      this.ctx.drawImage(
+        this.eatingSprite,
+        this.eatingSprite.horizontalFrameIndex * this.eatingSprite.frameWidth,
+        0,
+        this.eatingSprite.frameWidth,
+        this.eatingSprite.frameHeight,
+        this.x,
+        this.y,
+        this.w,
+        this.h
+      );
+      this.animateEating(); // Agrega esta línea para actualizar el fotograma de la animación de comer
+    } 
+    else if (this.isWalking && this.isOnGround && this.walkingSprite.isReady) {
       this.ctx.save();
       if (this.direction < 0) {
         this.ctx.scale(-1, 1);
@@ -155,11 +210,9 @@ class Pigeon {
       this.animateWalking();
     }
     else if (this.flyingSprite.isReady) {
-      this.ctx.save(); // Guarda el contexto actual
-      if (this.direction < 0) { // Si la paloma se mueve hacia la izquierda
-        // Voltea el contexto horizontalmente
+      this.ctx.save();
+      if (this.direction < 0) {
         this.ctx.scale(-1, 1);
-        // Dibuja el flyingSprite volteado
         this.ctx.drawImage(
           this.flyingSprite,
           this.flyingSprite.horizontalFrameIndex * this.flyingSprite.frameWidth,
@@ -172,7 +225,6 @@ class Pigeon {
           this.h
         );
       } else {
-
         this.ctx.drawImage(
           this.flyingSprite,
           this.flyingSprite.horizontalFrameIndex * this.flyingSprite.frameWidth,
@@ -188,10 +240,10 @@ class Pigeon {
       this.ctx.restore();
       this.animate();
     }
-
+  
     this.weapon.draw();
   }
-
+  
   animate() {
 
     if (this.vx !== 0 || this.vy !== 0) {
@@ -222,5 +274,23 @@ class Pigeon {
   }
 
 
+  animateEating() {
+    this.animationTick++;
+  
+    if (this.animationTick > PIGEON_EAT_ANIMATION_TICK) {
+      this.animationTick = 0;
+      this.eatingSprite.horizontalFrameIndex++;
+  
+      if (this.eatingSprite.horizontalFrameIndex >= this.eatingSprite.horizontalFrames) {
+        this.eatingSprite.horizontalFrameIndex = 0; // reinicia el índice de fotogramas
 
+        if (this.shouldStopEating) {
+          this.isEating = false; // termina la animación de comer aquí
+          this.shouldStopEating = false;
+          console.log('Pigeon stops eating.');
+        }
+      }
+    }
+  }
 }
+ 

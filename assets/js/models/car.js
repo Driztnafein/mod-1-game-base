@@ -1,4 +1,4 @@
-class Enemy {
+class Car {
   constructor(ctx) {
     this.ctx = ctx;
     this.x = this.ctx.canvas.width;

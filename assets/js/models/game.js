@@ -7,13 +7,21 @@ class Game {
     this.fps = 60;
 
     this.background = new Background(this.ctx);
-    this.pigeon = new Pigeon(this.ctx, 10, this.canvas.height - 164);
-    this.enemies = [];
+    this.pigeon = new Pigeon(this.ctx, 10, this.canvas.height - 140);
+   
+    this.oldMan = new OldMan(this.ctx, 90, this.canvas.height - 220,);
 
-    this.audio = new Audio("/assets/audio/main.mp3");
-    this.audio.volume = 0.05;
+    this.cars = [];
+
+    
+    this.breadCrumbs = [];
+
+    this.groundHeight = this.ctx.canvas.height - 50;
    
 
+    this.audio = new Audio("/assets/audio/main.mp3");
+    this.audio.volume = 0.0;
+   
     this.tick = 0;
   }
 
@@ -34,7 +42,7 @@ class Game {
         this.move();
         this.draw();
         this.checkCollisions();
-        this.addEnemy();
+        this.addCar();
       }, 1000 / this.fps);
     }
   }
@@ -45,19 +53,19 @@ class Game {
     this.drawIntervalId = undefined;
   }
 
-  addEnemy() {
+  addCar() {
     this.tick++;
 
     if (this.tick > 300) {
       this.tick = 0;
-      this.enemies.push(new Enemy(this.ctx));
+      this.cars.push(new Car(this.ctx));
     }
   }
 
   checkCollisions() {
     const m = this.pigeon;
 
-    this.enemies.forEach((e) => {
+    this.cars.forEach((e) => {
       const colx = m.x + m.w >= e.x && m.x < e.x + e.w;
       const coly = m.y + m.h >= e.y && m.y < e.y + e.h;
 
@@ -83,17 +91,40 @@ class Game {
 
   clear() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    
   }
 
   move() {
-  
     this.pigeon.move();
-    this.enemies.forEach((e) => e.move());
+    this.oldMan.move();
+  
+    if (this.oldMan.isThrowing && this.oldMan.breadCrumb) {
+      this.oldMan.breadCrumb.move();
+    }
+  
+    this.cars.forEach((e) => e.move());
   }
 
   draw() {
     this.background.draw();
     this.pigeon.draw();
-    this.enemies.forEach((e) => e.draw());
+        this.oldMan.draw();
+        
+    if (this.oldMan.isThrowing && this.oldMan.breadCrumb) {
+      this.oldMan.breadCrumb.move();
+      this.oldMan.breadCrumb.draw();
+    }
+    
+    this.breadCrumbs.forEach((breadCrumb) => {
+      breadCrumb.move();
+      breadCrumb.draw();
+    });
+    this.cars.forEach((e) => e.draw());
   }
+  
+  
+  
+
+  
+  
 }

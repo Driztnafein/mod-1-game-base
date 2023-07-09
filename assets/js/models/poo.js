@@ -8,8 +8,8 @@ class Poo {
     this.ax = 0;
     this.ay = 0.03;
     this.sprite = new Image();
-    this.width = 40; // define the width
-    this.height = 40; // define the height
+    this.width = 40; 
+    this.height = 40; 
   }
 
   draw() {
