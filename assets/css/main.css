@@ -1,4 +1,3 @@
-
 body {
   margin: 0;
   overflow: hidden;
@@ -8,9 +7,28 @@ body {
   width: 100vw;
   height: 100vh;
   background: #eee;
+  background-image: url('/assets/img/PantallaMain.png');
+  background-size: 1000px 1000px; /* Ajusta el tamaño de la imagen en píxeles */
+  background-repeat: no-repeat; /* Evita la repetición de la imagen */
+  background-position: center; /* Centra la imagen en el contenedor */
 }
+
 
 canvas {
   border: 1px solid black;
+}
 
+#start-btn {
+  background-color: transparent;
+  width: 200px;
+  height: 100px;
+  border: none;
+  color: #110505;
+  font-size: 20px;
+  font-family: 'Press Start 2P', cursive;
+  cursor: pointer;
+}
+
+#start-btn:hover {
+  opacity: 0.8;
 }

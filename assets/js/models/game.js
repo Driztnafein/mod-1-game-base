@@ -30,7 +30,7 @@ class Game {
     this.breadCrumbCount = 0;
 
     this.audio = new Audio("/assets/audio/main.mp3");
-    this.audio.volume = 0.0;
+    this.audio.volume = 0.3;
 
     this.tick = 0;
   }
@@ -205,7 +205,7 @@ class Game {
 
     this.ctx.fillStyle = "white";
 this.ctx.font = "20px 'Press Start 2P'";
-let text = `Colisiones poo-coche: ${this.pooCarCollisions}`;
+let text = `Colisiones caca-coche: ${this.pooCarCollisions}`;
 let textWidth = this.ctx.measureText(text).width;
 let canvasWidth = this.ctx.canvas.width;
 this.ctx.fillText(text, canvasWidth - textWidth - 20, 50);
