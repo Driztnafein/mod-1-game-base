@@ -44,7 +44,7 @@ class OldMan {
   throwBreadCrumb() {
     if (!this.isThrowing && !this.breadCrumb) {
       this.breadCrumb = new BreadCrumb(this.ctx, this.x + this.w, this.y + this.h);
-      console.log('Miga de pan lanzada:', this.breadCrumb);
+      
       game.breadCrumbs.push(this.breadCrumb); // Agregar la migaja de pan al array en la clase Game
     }
   }
